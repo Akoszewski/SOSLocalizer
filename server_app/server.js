@@ -1,1 +1,0 @@
-Potrzebujemy serwera. Zastanawiam się między express js, albo w pythonie: framework bottle lub flask. 

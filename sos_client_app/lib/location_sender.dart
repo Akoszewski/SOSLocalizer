@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:geolocator/geolocator.dart';
 
 class LocationSender {
@@ -7,7 +10,20 @@ class LocationSender {
 
   Future<bool> sendPosition() async {
     Position pos = await _determinePosition();
+    await _sendData(pos.toString());
     print(pos);
+    return true;
+  }
+
+  Future<bool> _sendData(String data) async {
+    Socket socket = await Socket.connect("192.168.0.161", 4567);
+    print("connected");
+    socket.listen((List<int> event) {
+      print(utf8.decode(event));
+    });
+    socket.add(utf8.encode(data));
+    //await Future.delayed(Duration(seconds: 5));
+    socket.close();
     return true;
   }
 
