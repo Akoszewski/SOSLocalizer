@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:sos_client_app/location_sender.dart';
 import "sos_button.dart";
 
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final LocationSender locationSender;
+
+  const MyApp({Key? key})
+      : locationSender = const LocationSender(),
+        super(key: key);
+
+  void _onSOS() async {
+    await locationSender.sendPosition();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.yellow[100],
-        body: const Center(child: SosButton()),
+        body: Center(child: SosButton(callback: _onSOS)),
       ),
     );
   }

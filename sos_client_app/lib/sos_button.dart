@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SosButton extends StatelessWidget {
-  const SosButton({Key? key}) : super(key: key);
+  final VoidCallback? callback;
+  const SosButton({Key? key, this.callback}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -18,9 +20,7 @@ class SosButton extends StatelessWidget {
             ),
           ),
         ),
-        onPressed: () {
-          print("asdf");
-        },
+        onPressed: callback,
         child: const Text('SOS',
             style: TextStyle(
                 fontSize: 22,
