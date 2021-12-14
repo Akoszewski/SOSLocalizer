@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sos_client_app/location_sender.dart';
+import 'main_map.dart';
 import "sos_button.dart";
 
 void main() => runApp(MyApp());
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
               StreamBuilder(
                 stream: locationSender.channel.stream,
                 builder: (context, snapshot) {
-                  return Text(snapshot.hasData ? '${snapshot.data}' : '');
+                  return MainMap(snapshot.hasData ? '${snapshot.data}' : '');
+                  // return Text(snapshot.hasData ? '${snapshot.data}' : '');
                 },
               ),
               SosButton(callback: _onSOS),
