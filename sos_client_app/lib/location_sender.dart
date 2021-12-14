@@ -1,10 +1,14 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:geolocator/geolocator.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class LocationSender {
-  const LocationSender();
+  LocationSender() {
+    Uri serverUri = Uri.parse("ws://192.168.0.161:7777");
+    channel = WebSocketChannel.connect(serverUri);
+  }
+
+  late WebSocketChannel channel;
 
   // Future<bool> _checkLocationPermission() {}
 
@@ -16,14 +20,7 @@ class LocationSender {
   }
 
   Future<bool> _sendData(String data) async {
-    Socket socket = await Socket.connect("192.168.0.161", 4567);
-    print("connected");
-    socket.listen((List<int> event) {
-      print(utf8.decode(event));
-    });
-    socket.add(utf8.encode(data));
-    //await Future.delayed(Duration(seconds: 5));
-    socket.close();
+    channel.sink.add(utf8.encode(data));
     return true;
   }
 

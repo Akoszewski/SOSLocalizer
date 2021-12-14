@@ -1,12 +1,28 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 void main() => runApp(MyApp());
 
+Future<bool> _getData() async {
+  Socket socket = await Socket.connect("192.168.0.161", 4567);
+  print("connected");
+  socket.listen((List<int> event) {
+    print(utf8.decode(event));
+  });
+  //socket.add(utf8.encode(data));
+  await Future.delayed(Duration(seconds: 50));
+  socket.close();
+  return true;
+}
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    _getData();
     return MaterialApp(
       title: 'Welcome to Flutter',
       home: Scaffold(
