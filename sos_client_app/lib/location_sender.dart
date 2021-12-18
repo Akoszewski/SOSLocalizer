@@ -4,7 +4,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 class LocationSender {
   LocationSender() {
-    Uri serverUri = Uri.parse("ws://192.168.0.161:7777");
+    Uri serverUri = Uri.parse("ws://3.68.186.250:7777");
     channel = WebSocketChannel.connect(serverUri);
   }
 
