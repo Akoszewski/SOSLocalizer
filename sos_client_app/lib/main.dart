@@ -26,25 +26,18 @@ class MyApp extends StatelessWidget {
       title: 'SOSLocalizer',
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Colors.yellow[100],
-        body: Center(
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          StreamBuilder(
-            stream: locationSender.channel.stream,
-            builder: (context, snapshot) {
-              return MainMap(snapshot.hasData ? '${snapshot.data}' : '');
-            },
-          ),
-          SosButton(callback: _onSOS),
-        ])),
-      ),
+          body: Stack(alignment: Alignment.center, children: [
+        StreamBuilder(
+          stream: locationSender.channel.stream,
+          builder: (context, snapshot) {
+            return MainMap(snapshot.hasData ? '${snapshot.data}' : '');
+          },
+        ),
+        Positioned(
+          bottom: 20,
+          child: SosButton(callback: _onSOS),
+        )
+      ])),
     );
   }
-
-  // @override
-  // void dispose() {
-  //   locationSender.channel.sink.close();
-  //   super.dispose();
-  // }
 }

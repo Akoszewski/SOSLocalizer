@@ -24,38 +24,31 @@ class MainMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    return Container(
-      width: screenWidth * 0.9,
-      height: screenHeight * 0.7,
-      margin: EdgeInsets.all(screenWidth * 0.1),
-      child: FlutterMap(
-        options: MapOptions(
-          center: LatLng(coords[0], coords[1]),
-          //center: null,
-          zoom: 13.0,
-        ),
-        layers: [
-          TileLayerOptions(
-            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            subdomains: ['a', 'b', 'c'],
-            attributionBuilder: (_) {
-              return Text("© OpenStreetMap contributors");
-            },
-          ),
-          MarkerLayerOptions(
-            markers: [
-              Marker(
-                width: 10.0,
-                height: 10.0,
-                point: LatLng(coords[0], coords[1]),
-                builder: (ctx) => const SosMarker(),
-              ),
-            ],
-          ),
-        ],
+    return FlutterMap(
+      options: MapOptions(
+        center: LatLng(coords[0], coords[1]),
+        //center: null,
+        zoom: 13.0,
       ),
+      layers: [
+        TileLayerOptions(
+          urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          subdomains: ['a', 'b', 'c'],
+          attributionBuilder: (_) {
+            return Text("© OpenStreetMap contributors");
+          },
+        ),
+        MarkerLayerOptions(
+          markers: [
+            Marker(
+              width: 10.0,
+              height: 10.0,
+              point: LatLng(coords[0], coords[1]),
+              builder: (ctx) => const SosMarker(),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
