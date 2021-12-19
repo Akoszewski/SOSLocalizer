@@ -37,6 +37,7 @@ dependencies:
   geolocator: ^7.7.1
   web_socket_channel: ^2.1.0
   flutter_map: ^0.14.0
+  url_strategy: ^0.2.0
 
 dev_dependencies:
   flutter_test:
