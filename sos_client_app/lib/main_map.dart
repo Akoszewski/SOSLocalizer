@@ -6,29 +6,18 @@ import 'package:latlong2/latlong.dart';
 import 'sos_marker.dart';
 
 class MainMap extends StatelessWidget {
-  MainMap(String coordsStr, {Key? key}) : super(key: key) {
-    coords = parseCoords(coordsStr);
-  }
-  late final List<double> coords;
-
-  List<double> parseCoords(String coordsStr) {
-    if (coordsStr.length > 0) {
-      List<String> split = coordsStr.replaceAll(",", "").split(" ");
-      print(split[0]);
-      print(split[1]);
-      return [double.parse(split[1]), double.parse(split[3])];
-    } else {
-      return [52.5, 21];
-    }
-  }
+  MainMap({Key? key, required this.userCoords, this.sosCoords})
+      : super(key: key);
+  late final LatLng userCoords;
+  late final LatLng? sosCoords;
 
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
       options: MapOptions(
-        center: LatLng(coords[0], coords[1]),
+        center: userCoords,
         //center: null,
-        zoom: 13.0,
+        zoom: 8,
       ),
       layers: [
         TileLayerOptions(
@@ -41,9 +30,9 @@ class MainMap extends StatelessWidget {
         MarkerLayerOptions(
           markers: [
             Marker(
-              width: 10.0,
-              height: 10.0,
-              point: LatLng(coords[0], coords[1]),
+              width: (sosCoords != null) ? 10.0 : 0,
+              height: (sosCoords != null) ? 10.0 : 0,
+              point: sosCoords ?? LatLng(0, 0),
               builder: (ctx) => const SosMarker(),
             ),
           ],

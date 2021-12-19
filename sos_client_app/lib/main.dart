@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:sos_client_app/location_sender.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'package:latlong2/latlong.dart';
+import 'location.dart';
 import 'main_map.dart';
 import "sos_button.dart";
 
@@ -20,6 +23,22 @@ class MyApp extends StatelessWidget {
     await locationSender.sendPosition();
   }
 
+  LatLng? parseCoords(String coordsStr) {
+    if (coordsStr.isNotEmpty && coordsStr != "null") {
+      List<String> split = coordsStr.replaceAll(",", "").split(" ");
+      print("Coord str: " + coordsStr);
+      return LatLng(double.parse(split[1]), double.parse(split[3]));
+    } else {
+      return null;
+    }
+  }
+
+  Future<LatLng?> getUserCoords() async {
+    Location location = Location();
+    Position pos = await location.determineLocation();
+    return parseCoords(pos.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,7 +49,20 @@ class MyApp extends StatelessWidget {
         StreamBuilder(
           stream: locationSender.channel.stream,
           builder: (context, snapshot) {
-            return MainMap(snapshot.hasData ? '${snapshot.data}' : '');
+            //return FutureBuilder<LatLng>(
+            //    future: getUserCoords(),
+            //    builder: (futureContext, futureSnapshot) {
+            //      if (futureSnapshot.connectionState == ConnectionState.done) {
+            return MainMap(
+                //userCoords: futureSnapshot.data!,
+                userCoords: LatLng(52.2, 21),
+                sosCoords: parseCoords(snapshot.data.toString()));
+            //   } else {
+            //     return MainMap(
+            //         userCoords: LatLng(52.2, 21),
+            //         sosCoords: parseCoords(snapshot.data.toString()));
+            //   }
+            // });
           },
         ),
         Positioned(
