@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 import 'location.dart';
 
 class LocationSender {
@@ -12,8 +13,9 @@ class LocationSender {
 
   Future<bool> sendPosition() async {
     Location location = Location();
-    Position pos = await location.determineLocation();
-    await _sendData(pos.toString());
+    LatLng coords = await location.determineLocation();
+    await _sendData(
+        coords.latitude.toString() + " " + coords.longitude.toString());
     return true;
   }
 

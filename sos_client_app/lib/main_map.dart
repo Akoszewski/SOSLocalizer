@@ -28,14 +28,13 @@ class _MainMapState extends State<MainMap> {
     }
   }
 
-  Future<LatLng?> getUserCoords() async {
+  Future<LatLng> getUserCoords() async {
     Location location = Location();
-    Position pos = await location.determineLocation();
-    return parseCoords(pos.toString());
+    return await location.determineLocation();
   }
 
   Future<void> setMapCenter() async {
-    LatLng? newCoords = await getUserCoords();
+    LatLng newCoords = await getUserCoords();
     if (newCoords != null) {
       setState(() {
         widget.mapController.move(newCoords, 9);
@@ -62,7 +61,7 @@ class _MainMapState extends State<MainMap> {
           urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
           subdomains: ['a', 'b', 'c'],
           attributionBuilder: (_) {
-            return Text("© OpenStreetMap contributors");
+            return const Text("© OpenStreetMap contributors");
           },
         ),
         MarkerLayerOptions(
