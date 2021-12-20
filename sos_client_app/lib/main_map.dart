@@ -1,22 +1,60 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:sos_client_app/location.dart';
 
 import 'sos_marker.dart';
 
-class MainMap extends StatelessWidget {
-  MainMap({Key? key, required this.userCoords, this.sosCoords})
-      : super(key: key);
-  late final LatLng userCoords;
+class MainMap extends StatefulWidget {
+  MainMap({Key? key, this.sosCoords}) : super(key: key) {}
+  MapController mapController = MapController();
+
   late final LatLng? sosCoords;
+
+  @override
+  _MainMapState createState() => _MainMapState();
+}
+
+class _MainMapState extends State<MainMap> {
+  LatLng centerCoords = LatLng(52.2, 21);
+  LatLng? parseCoords(String coordsStr) {
+    if (coordsStr.isNotEmpty && coordsStr != "null") {
+      List<String> split = coordsStr.replaceAll(",", "").split(" ");
+      return LatLng(double.parse(split[1]), double.parse(split[3]));
+    } else {
+      return null;
+    }
+  }
+
+  Future<LatLng?> getUserCoords() async {
+    Location location = Location();
+    Position pos = await location.determineLocation();
+    return parseCoords(pos.toString());
+  }
+
+  Future<void> setMapCenter() async {
+    LatLng? newCoords = await getUserCoords();
+    if (newCoords != null) {
+      setState(() {
+        widget.mapController.move(newCoords, 9);
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setMapCenter();
+  }
 
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
+      mapController: widget.mapController,
       options: MapOptions(
-        center: userCoords,
-        //center: null,
+        center: centerCoords,
         zoom: 8,
       ),
       layers: [
@@ -30,9 +68,9 @@ class MainMap extends StatelessWidget {
         MarkerLayerOptions(
           markers: [
             Marker(
-              width: (sosCoords != null) ? 10.0 : 0,
-              height: (sosCoords != null) ? 10.0 : 0,
-              point: sosCoords ?? LatLng(0, 0),
+              width: (widget.sosCoords != null) ? 10.0 : 0,
+              height: (widget.sosCoords != null) ? 10.0 : 0,
+              point: widget.sosCoords ?? LatLng(0, 0),
               builder: (ctx) => const SosMarker(),
             ),
           ],

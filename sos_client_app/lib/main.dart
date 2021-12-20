@@ -55,7 +55,6 @@ class MyApp extends StatelessWidget {
             //      if (futureSnapshot.connectionState == ConnectionState.done) {
             return MainMap(
                 //userCoords: futureSnapshot.data!,
-                userCoords: LatLng(52.2, 21),
                 sosCoords: parseCoords(snapshot.data.toString()));
             //   } else {
             //     return MainMap(
@@ -67,7 +66,7 @@ class MyApp extends StatelessWidget {
         ),
         Positioned(
           bottom: 20,
-          child: SosButton(callback: _onSOS),
+          child: SosButton(text: "SOS", callback: _onSOS),
         )
       ])),
     );

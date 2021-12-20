@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class SosButton extends StatelessWidget {
   final VoidCallback? callback;
-  const SosButton({Key? key, this.callback}) : super(key: key);
+  SosButton({Key? key, this.text, this.callback}) : super(key: key);
+
+  String? text;
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +23,8 @@ class SosButton extends StatelessWidget {
           ),
         ),
         onPressed: callback,
-        child: const Text('SOS',
-            style: TextStyle(
+        child: Text(text ?? '',
+            style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Colors.black)),
