@@ -6,7 +6,6 @@ class Location {
   Future<LatLng?> determineLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
-    LatLng? coords;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {

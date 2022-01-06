@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:sos_client_app/location_data.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
@@ -16,8 +17,11 @@ class LocationSender {
     Location location = Location();
     LatLng? coords = await location.determineLocation();
     if (coords != null) {
-      await _sendData(
-          coords.latitude.toString() + " " + coords.longitude.toString());
+      LocationData data =
+          LocationData("SOS", coords.latitude, coords.longitude);
+      String encodedData = jsonEncode(data);
+      print(encodedData);
+      await _sendData(encodedData);
     }
     return true;
   }

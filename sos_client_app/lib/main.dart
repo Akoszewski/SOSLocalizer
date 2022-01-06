@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:sos_client_app/location_sender.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:latlong2/latlong.dart';
+import 'location_data.dart';
 import 'main_map.dart';
 import "sos_button.dart";
 
@@ -22,10 +25,11 @@ class MyApp extends StatelessWidget {
   }
 
   LatLng? parseCoords(String coordsStr) {
-    if (coordsStr.isNotEmpty && coordsStr != "null") {
-      List<String> split = coordsStr.split(" ");
-      print("Coord str: " + coordsStr);
-      return LatLng(double.parse(split[0]), double.parse(split[1]));
+    print("Received: $coordsStr");
+    if (coordsStr != "null") {
+      Map<String, dynamic>? json = jsonDecode(coordsStr);
+      LocationData data = LocationData.fromJson(json!);
+      return LatLng(data.latitude, data.longitude);
     } else {
       return null;
     }
@@ -41,19 +45,8 @@ class MyApp extends StatelessWidget {
         StreamBuilder(
           stream: locationSender.channel.stream,
           builder: (context, snapshot) {
-            //return FutureBuilder<LatLng>(
-            //    future: getUserCoords(),
-            //    builder: (futureContext, futureSnapshot) {
-            //      if (futureSnapshot.connectionState == ConnectionState.done) {
-            return MainMap(
-                //userCoords: futureSnapshot.data!,
-                sosCoords: parseCoords(snapshot.data.toString()));
-            //   } else {
-            //     return MainMap(
-            //         userCoords: LatLng(52.2, 21),
-            //         sosCoords: parseCoords(snapshot.data.toString()));
-            //   }
-            // });
+            print(parseCoords(snapshot.data.toString()));
+            return MainMap(sosCoords: parseCoords(snapshot.data.toString()));
           },
         ),
         Positioned(
