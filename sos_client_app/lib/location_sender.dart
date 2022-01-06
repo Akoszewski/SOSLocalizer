@@ -13,9 +13,11 @@ class LocationSender {
 
   Future<bool> sendPosition() async {
     Location location = Location();
-    LatLng coords = await location.determineLocation();
-    await _sendData(
-        coords.latitude.toString() + " " + coords.longitude.toString());
+    LatLng? coords = await location.determineLocation();
+    if (coords != null) {
+      await _sendData(
+          coords.latitude.toString() + " " + coords.longitude.toString());
+    }
     return true;
   }
 

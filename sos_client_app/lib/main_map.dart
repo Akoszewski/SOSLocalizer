@@ -28,13 +28,13 @@ class _MainMapState extends State<MainMap> {
     }
   }
 
-  Future<LatLng> getUserCoords() async {
+  Future<LatLng?> getUserCoords() async {
     Location location = Location();
     return await location.determineLocation();
   }
 
   Future<void> setMapCenter() async {
-    LatLng newCoords = await getUserCoords();
+    LatLng? newCoords = await getUserCoords();
     if (newCoords != null) {
       setState(() {
         widget.mapController.move(newCoords, 9);
