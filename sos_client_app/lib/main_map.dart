@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:sos_client_app/location.dart';
 
@@ -67,8 +66,8 @@ class _MainMapState extends State<MainMap> {
         MarkerLayerOptions(
           markers: [
             Marker(
-              width: (widget.sosCoords != null) ? 10.0 : 0,
-              height: (widget.sosCoords != null) ? 10.0 : 0,
+              width: (widget.sosCoords != null) ? 100.0 : 0,
+              height: (widget.sosCoords != null) ? 100.0 : 0,
               point: widget.sosCoords ?? LatLng(0, 0),
               builder: (ctx) => const SosMarker(),
             ),

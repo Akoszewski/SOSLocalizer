@@ -41,19 +41,7 @@ class MyApp extends StatelessWidget {
         StreamBuilder(
           stream: locationSender.channel.stream,
           builder: (context, snapshot) {
-            //return FutureBuilder<LatLng>(
-            //    future: getUserCoords(),
-            //    builder: (futureContext, futureSnapshot) {
-            //      if (futureSnapshot.connectionState == ConnectionState.done) {
-            return MainMap(
-                //userCoords: futureSnapshot.data!,
-                sosCoords: parseCoords(snapshot.data.toString()));
-            //   } else {
-            //     return MainMap(
-            //         userCoords: LatLng(52.2, 21),
-            //         sosCoords: parseCoords(snapshot.data.toString()));
-            //   }
-            // });
+            return MainMap(sosCoords: parseCoords(snapshot.data.toString()));
           },
         ),
         Positioned(
