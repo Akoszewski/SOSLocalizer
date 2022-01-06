@@ -6,7 +6,8 @@ import 'location.dart';
 
 class LocationSender {
   LocationSender() {
-    Uri serverUri = Uri.parse("ws://3.68.186.250:7777");
+    print("Connecting to backend...");
+    Uri serverUri = Uri.parse("wss://backend.sos-app.tk");
     channel = WebSocketChannel.connect(serverUri);
   }
   late WebSocketChannel channel;

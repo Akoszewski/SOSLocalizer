@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    volumes:
+      - ./pliki:/usr/share/nginx/html
+    environment:
+      VIRTUAL_HOST: sos-app.tk
+      LETSENCRYPT_HOST: sos-app.tk
+
+networks:
+  default:
+    name: nginx-proxy

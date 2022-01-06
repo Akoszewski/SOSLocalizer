@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  nginx:
+    image: backend
+    container_name: backend
+    restart: unless-stopped
+    volumes:
+      - ./pliki:/usr/share/nginx/html
+    environment:
+      VIRTUAL_HOST: backend.sos-app.tk
+      LETSENCRYPT_HOST: backend.sos-app.tk
+      VIRTUAL_PORT: 7777
+
+networks:
+  default:
+    name: nginx-proxy
