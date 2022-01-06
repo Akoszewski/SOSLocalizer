@@ -22,6 +22,11 @@ class LocationSender {
     return true;
   }
 
+  Future<bool> stopSOS() async {
+    await _sendData("STOP");
+    return true;
+  }
+
   Future<bool> _sendData(String data) async {
     channel.sink.add(utf8.encode(data));
     return true;

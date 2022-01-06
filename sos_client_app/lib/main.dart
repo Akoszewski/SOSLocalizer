@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:sos_client_app/location_sender.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -13,12 +15,22 @@ void main() {
 class MyApp extends StatelessWidget {
   late final LocationSender locationSender;
 
+  bool isSosSignal = false;
+  Timer? timer;
+
+  int locationSendingPeriod = 10;
+
   MyApp({Key? key}) : super(key: key) {
     locationSender = LocationSender();
   }
 
-  void _onSOS() async {
-    await locationSender.sendPosition();
+  void _onSOS() {
+    isSosSignal = isSosSignal ? false : true;
+    if (isSosSignal) {
+      locationSender.sendPosition();
+    } else {
+      locationSender.stopSOS();
+    }
   }
 
   LatLng? parseCoords(String coordsStr) {
@@ -41,24 +53,18 @@ class MyApp extends StatelessWidget {
         StreamBuilder(
           stream: locationSender.channel.stream,
           builder: (context, snapshot) {
-            //return FutureBuilder<LatLng>(
-            //    future: getUserCoords(),
-            //    builder: (futureContext, futureSnapshot) {
-            //      if (futureSnapshot.connectionState == ConnectionState.done) {
-            return MainMap(
-                //userCoords: futureSnapshot.data!,
-                sosCoords: parseCoords(snapshot.data.toString()));
-            //   } else {
-            //     return MainMap(
-            //         userCoords: LatLng(52.2, 21),
-            //         sosCoords: parseCoords(snapshot.data.toString()));
-            //   }
-            // });
+            // parseServerResponse(snapshot.data.toString()));
+            String serverResponse = snapshot.data.toString();
+            if (serverResponse == "STOP") {
+            } else {
+              return MainMap(sosCoords: parseCoords(serverResponse));
+            }
           },
         ),
         Positioned(
           bottom: 20,
-          child: SosButton(text: "SOS", callback: _onSOS),
+          child:
+              SosButton(text: isSosSignal ? "STOP" : "SOS", callback: _onSOS),
         )
       ])),
     );
