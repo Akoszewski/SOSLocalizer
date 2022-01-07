@@ -18,15 +18,7 @@ class MainMap extends StatefulWidget {
 }
 
 class _MainMapState extends State<MainMap> {
-  LatLng centerCoords = LatLng(52.2, 21);
-  LatLng? parseCoords(String coordsStr) {
-    if (coordsStr.isNotEmpty && coordsStr != "null") {
-      List<String> split = coordsStr.replaceAll(",", "").split(" ");
-      return LatLng(double.parse(split[1]), double.parse(split[3]));
-    } else {
-      return null;
-    }
-  }
+  LatLng centerCoords = LatLng(52.2, 21); // Domyslne poczatkowe ustawiene mapy
 
   Future<LatLng?> getUserCoords() async {
     Location location = Location();
@@ -44,9 +36,7 @@ class _MainMapState extends State<MainMap> {
 
   List<Marker> generateMarkers() {
     List<Marker> markers = [];
-    print("Generating ${markers.length} sos markers...");
     for (LatLng coords in widget.sosLocationList) {
-      print("New marker will be generated");
       markers.add(Marker(
         width: 10,
         height: 10,

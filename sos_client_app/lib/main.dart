@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sos_client_app/location_sender.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:latlong2/latlong.dart';
-import 'location_data.dart';
+import 'server_message.dart';
 import 'main_map.dart';
 import "sos_button.dart";
 
@@ -24,13 +24,6 @@ class MyApp extends StatelessWidget {
     await locationSender.sendPosition();
   }
 
-  LatLng parseServerResponse(String receivedStr) {
-    print("Received: $receivedStr");
-    Map<String, dynamic>? json = jsonDecode(receivedStr);
-    LocationData data = LocationData.fromJson(json!);
-    return LatLng(data.latitude, data.longitude);
-  }
-
   List<LatLng> sosMarkerLocations = [];
 
   @override
@@ -43,13 +36,11 @@ class MyApp extends StatelessWidget {
         StreamBuilder(
           stream: locationSender.channel.stream,
           builder: (context, snapshot) {
-            print("Dziala ${snapshot.data.toString()}");
             if (snapshot.data != null) {
-              print("Dziala2");
-              LatLng location = parseServerResponse(snapshot.data.toString());
-              sosMarkerLocations.add(location);
-              print(
-                  "SOS marker locations length: ${sosMarkerLocations.length}");
+              ServerMessage msg = ServerMessage.fromResponse(snapshot.data!);
+              if (msg.command == "SOS") {
+                sosMarkerLocations.add(LatLng(msg.latitude, msg.longitude));
+              }
             }
             return MainMap(sosLocationList: sosMarkerLocations);
           },

@@ -17,10 +17,9 @@ class LocationSender {
     Location location = Location();
     LatLng? coords = await location.determineLocation();
     if (coords != null) {
-      LocationData data =
-          LocationData("SOS", coords.latitude, coords.longitude);
+      ServerMessage data =
+          ServerMessage("SOS", coords.latitude, coords.longitude);
       String encodedData = jsonEncode(data);
-      print(encodedData);
       await _sendData(encodedData);
     }
     return true;
