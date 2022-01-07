@@ -21,10 +21,20 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   LocationSender locationSender = LocationSender();
 
+  bool isSosButtonActive = false;
+
   void _onSOS() async {
-    await locationSender.sendPosition();
+    setState(() {
+      isSosButtonActive = isSosButtonActive ? false : true;
+    });
+    if (isSosButtonActive) {
+      await locationSender.sendSOS();
+    } else {
+      await locationSender.stopSOS();
+    }
   }
 
+  Map<int, LatLng> sosMarkerLocationMap = {};
   List<LatLng> sosMarkerLocations = [];
 
   @override
@@ -37,8 +47,14 @@ class _MyAppState extends State<MyApp> {
     if (receivedData != null) {
       ServerMessage msg = ServerMessage.fromResponse(receivedData);
       if (msg.command == "SOS") {
-        sosMarkerLocations.add(LatLng(msg.latitude, msg.longitude));
+        sosMarkerLocationMap[msg.userId!] =
+            LatLng(msg.latitude!, msg.longitude!);
+      } else if (msg.command == "STOP") {
+        sosMarkerLocationMap.remove(msg.userId!);
       }
+      sosMarkerLocations = sosMarkerLocationMap.entries
+          .map((entry) => LatLng(entry.value.latitude, entry.value.longitude))
+          .toList();
     }
   }
 
@@ -58,7 +74,8 @@ class _MyAppState extends State<MyApp> {
         ),
         Positioned(
           bottom: 20,
-          child: SosButton(text: "SOS", callback: _onSOS),
+          child: SosButton(
+              text: isSosButtonActive ? "STOP" : "SOS", callback: _onSOS),
         )
       ])),
     );

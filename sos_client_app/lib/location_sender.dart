@@ -12,20 +12,24 @@ class LocationSender {
   }
   late WebSocketChannel channel;
 
-  Future<bool> sendPosition() async {
+  Future<void> sendSOS() async {
     Location location = Location();
     LatLng? coords = await location.determineLocation();
     if (coords != null) {
+      // UserId jest tutaj null bo dopiero serwer je przydzieli i odesle klientom
       ServerMessage data =
-          ServerMessage("SOS", coords.latitude, coords.longitude);
+          ServerMessage("SOS", null, coords.latitude, coords.longitude);
       String encodedData = jsonEncode(data);
       await _sendData(encodedData);
     }
-    return true;
   }
 
-  Future<bool> _sendData(String data) async {
+  Future<void> stopSOS() async {
+    String encodedData = jsonEncode({"command": "STOP"});
+    await _sendData(encodedData);
+  }
+
+  Future<void> _sendData(String data) async {
     channel.sink.add(utf8.encode(data));
-    return true;
   }
 }

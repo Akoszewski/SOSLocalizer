@@ -2,12 +2,14 @@ import 'dart:convert';
 
 class ServerMessage {
   String command;
-  double latitude;
-  double longitude;
+  int? userId;
+  double? latitude;
+  double? longitude;
 
-  ServerMessage(this.command, this.latitude, this.longitude);
+  ServerMessage(this.command, this.userId, this.latitude, this.longitude);
   ServerMessage.fromJson(Map<String, dynamic> json)
       : command = json['command'],
+        userId = json['uid'],
         latitude = json['latitude'],
         longitude = json['longitude'];
 

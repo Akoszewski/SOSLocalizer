@@ -2,18 +2,17 @@ var WebSocketServer = require("ws").Server;
 
 var wss = new WebSocketServer({port:7777});
 
-var last_id = 0;
+var last_uid = 0; // User ID
 
-function generateId() {
-    return last_id++;
+function generateUid() {
+    return last_uid++;
 }
 
 wss.on('connection', function connection(ws) {
+    ws.uid = generateUid();
     ws.on('message', function(message) {
         var msg = JSON.parse(message);
-        if (msg.command == "SOS") {
-            msg.id = generateId();
-        }
+            msg.uid = ws.uid;
         wss.broadcast(JSON.stringify(msg));
     });
 });

@@ -7,10 +7,10 @@ import 'package:sos_client_app/location.dart';
 import 'sos_marker.dart';
 
 class MainMap extends StatefulWidget {
-  MainMap({Key? key, this.sosLocationList = const []}) : super(key: key);
-  MapController mapController = MapController();
+  final MapController mapController = MapController();
+  final List<LatLng> sosLocationList;
 
-  List<LatLng> sosLocationList;
+  MainMap({Key? key, this.sosLocationList = const []}) : super(key: key);
 
   @override
   _MainMapState createState() => _MainMapState();

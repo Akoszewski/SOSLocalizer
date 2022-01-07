@@ -10,4 +10,4 @@ scp -i ../keys/private.pem -r ../docker/docker-compose-proxy.yml ubuntu@3.68.186
 
 # wrzucanie backendu
 scp -i ../keys/private.pem ../docker/backend/* ubuntu@3.68.186.250:~/docker/backend/
-# + na serwerze "docker build -t backend ."; "docker-compose up -d"
+ssh -i ../keys/private.pem ubuntu@3.68.186.250 'cd ~/docker/backend/; docker build -t backend .; docker-compose up -d'
