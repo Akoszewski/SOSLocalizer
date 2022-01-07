@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:latlong2/latlong.dart';
-
 class ServerMessage {
   String command;
   double latitude;

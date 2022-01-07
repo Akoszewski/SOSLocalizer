@@ -1,7 +1,6 @@
 import 'dart:convert';
-import 'package:sos_client_app/location_data.dart';
+import 'package:sos_client_app/server_message.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'location.dart';
 
