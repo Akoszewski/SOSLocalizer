@@ -8,10 +8,10 @@ import 'package:sos_client_app/location.dart';
 import 'sos_marker.dart';
 
 class MainMap extends StatefulWidget {
-  MainMap({Key? key, this.sosCoords}) : super(key: key) {}
+  MainMap({Key? key, this.sosLocationList = const []}) : super(key: key);
   MapController mapController = MapController();
 
-  late final LatLng? sosCoords;
+  List<LatLng> sosLocationList;
 
   @override
   _MainMapState createState() => _MainMapState();
@@ -42,6 +42,21 @@ class _MainMapState extends State<MainMap> {
     }
   }
 
+  List<Marker> generateMarkers() {
+    List<Marker> markers = [];
+    print("Generating ${markers.length} sos markers...");
+    for (LatLng coords in widget.sosLocationList) {
+      print("New marker will be generated");
+      markers.add(Marker(
+        width: 10,
+        height: 10,
+        point: coords,
+        builder: (ctx) => const SosMarker(),
+      ));
+    }
+    return markers;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -65,14 +80,7 @@ class _MainMapState extends State<MainMap> {
           },
         ),
         MarkerLayerOptions(
-          markers: [
-            Marker(
-              width: (widget.sosCoords != null) ? 10.0 : 0,
-              height: (widget.sosCoords != null) ? 10.0 : 0,
-              point: widget.sosCoords ?? LatLng(0, 0),
-              builder: (ctx) => const SosMarker(),
-            ),
-          ],
+          markers: generateMarkers(),
         ),
       ],
     );

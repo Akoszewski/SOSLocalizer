@@ -24,16 +24,14 @@ class MyApp extends StatelessWidget {
     await locationSender.sendPosition();
   }
 
-  LatLng? parseCoords(String coordsStr) {
-    print("Received: $coordsStr");
-    if (coordsStr != "null") {
-      Map<String, dynamic>? json = jsonDecode(coordsStr);
-      LocationData data = LocationData.fromJson(json!);
-      return LatLng(data.latitude, data.longitude);
-    } else {
-      return null;
-    }
+  LatLng parseServerResponse(String receivedStr) {
+    print("Received: $receivedStr");
+    Map<String, dynamic>? json = jsonDecode(receivedStr);
+    LocationData data = LocationData.fromJson(json!);
+    return LatLng(data.latitude, data.longitude);
   }
+
+  List<LatLng> sosMarkerLocations = [];
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +43,15 @@ class MyApp extends StatelessWidget {
         StreamBuilder(
           stream: locationSender.channel.stream,
           builder: (context, snapshot) {
-            print(parseCoords(snapshot.data.toString()));
-            return MainMap(sosCoords: parseCoords(snapshot.data.toString()));
+            print("Dziala ${snapshot.data.toString()}");
+            if (snapshot.data != null) {
+              print("Dziala2");
+              LatLng location = parseServerResponse(snapshot.data.toString());
+              sosMarkerLocations.add(location);
+              print(
+                  "SOS marker locations length: ${sosMarkerLocations.length}");
+            }
+            return MainMap(sosLocationList: sosMarkerLocations);
           },
         ),
         Positioned(
